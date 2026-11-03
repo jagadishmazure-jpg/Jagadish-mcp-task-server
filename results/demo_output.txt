@@ -1,0 +1,20 @@
+== plain FastMCP client ==
+Tools: create_task, list_tasks, update_task_status
+Created: Write MCP notes todo
+Updated: Write MCP notes in_progress
+- Write MCP notes [high] in_progress
+
+== LangChain agent (offline fake model) ==
+you> add task MCP tutorial
+agent> Created 'MCP tutorial' (status: todo).
+you> mark MCP tutorial as done
+agent> Updated 'MCP tutorial' (status: done).
+you> change the description of MCP tutorial to something else
+agent> I can't do that. This server only lets me create tasks, list them and change their status.
+you> list tasks
+agent> Your tasks:
+- Write MCP notes [high] - in_progress
+- MCP tutorial [medium] - done
+
+== latency, list_tasks over loopback HTTP (measured, n=50) ==
+median 4.30 ms, p95 4.89 ms

@@ -1,0 +1,7 @@
+# Copy this block into ~/.codex/config.toml (or .codex/config.toml in a trusted project).
+# Start the server first:  uv run python server.py
+[mcp_servers.task-server]
+url = "http://127.0.0.1:8000/mcp"
+# Only needed if you started the server with MCP_AUTH_TOKEN set.
+# This is the NAME of an environment variable, not the token itself.
+bearer_token_env_var = "MCP_AUTH_TOKEN"

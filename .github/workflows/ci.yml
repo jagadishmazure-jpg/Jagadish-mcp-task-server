@@ -1,0 +1,36 @@
+# Offline CI: no API keys, no network calls beyond installing pinned dependencies.
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with: { persist-credentials: false }
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with: { version: "0.13.6" }
+      - name: Install (locked)
+        run: uv sync --locked --python 3.12
+      - name: Lint
+        run: uv run ruff check .
+      - name: Tests (prints the real total)
+        run: uv run python scripts/count_tests.py
+      - name: Docs check (test counts in docs match a fresh collection)
+        run: uv run python scripts/docs_check.py
+      - name: Brand check (hashed blocklist)
+        run: uv run python scripts/brand_check.py
+      - name: End-to-end demo over real HTTP
+        run: uv run python scripts/run_demo.py
+  secrets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with: { fetch-depth: 0, persist-credentials: false }
+      - name: gitleaks (full history)
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.21.2 detect --source /repo --redact -v

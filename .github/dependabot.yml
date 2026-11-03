@@ -1,0 +1,20 @@
+# Weekly, grouped updates. Major bumps are reviewed by hand, never auto-merged.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
+  - package-ecosystem: uv
+    directory: /
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    ignore:
+      # langchain-mcp-adapters needs the 1.x MCP SDK; see ADR notes in docs/03-interview-points.md
+      - dependency-name: "mcp"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "fastmcp"
+        update-types: ["version-update:semver-major"]
