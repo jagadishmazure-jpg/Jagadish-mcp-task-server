@@ -1,9 +1,8 @@
-"""Report any 8-word run shared between our docs and a source text.
+"""Report any 8-word run shared between our docs and a reference text.
 
-    python scripts/overlap_check.py /path/to/source.txt
+    python scripts/overlap_check.py /path/to/reference.txt
 
-The source (for example a tutorial transcript) is never committed; pass its
-path at run time. Target: 0 shared 8-word runs.
+The reference text is never committed; pass its path at run time. Target: 0 shared 8-word runs.
 """
 
 from __future__ import annotations

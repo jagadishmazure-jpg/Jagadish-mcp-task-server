@@ -42,9 +42,9 @@ async def run(url: str) -> None:
     async with Client(url) as c:
         agent = await lc.build_agent(c.session, model=FakeTaskModel())
         for text in [
-            "add task MCP tutorial",
-            "mark MCP tutorial as done",
-            "change the description of MCP tutorial to something else",
+            "add task MCP runbook",
+            "mark MCP runbook as done",
+            "change the description of MCP runbook to something else",
             "list tasks",
         ]:
             print(f"you> {text}\nagent> {await lc.ask(agent, text)}")

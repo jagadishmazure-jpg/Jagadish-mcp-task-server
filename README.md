@@ -113,16 +113,16 @@ Updated: Write MCP notes in_progress
 - Write MCP notes [high] in_progress
 
 == LangChain agent (offline fake model) ==
-you> add task MCP tutorial
-agent> Created 'MCP tutorial' (status: todo).
-you> mark MCP tutorial as done
-agent> Updated 'MCP tutorial' (status: done).
-you> change the description of MCP tutorial to something else
+you> add task MCP runbook
+agent> Created 'MCP runbook' (status: todo).
+you> mark MCP runbook as done
+agent> Updated 'MCP runbook' (status: done).
+you> change the description of MCP runbook to something else
 agent> I can't do that. This server only lets me create tasks, list them and change their status.
 you> list tasks
 agent> Your tasks:
 - Write MCP notes [high] - in_progress
-- MCP tutorial [medium] - done
+- MCP runbook [medium] - done
 
 == latency, list_tasks over loopback HTTP (measured, n=50) ==
 median 4.30 ms, p95 4.89 ms
@@ -198,10 +198,6 @@ GitHub Actions (`.github/workflows/ci.yml`, actions pinned to full SHAs): `uv sy
 - [Jagadish-agent-auth-security](https://github.com/jagadishmazure-jpg/Jagadish-agent-auth-security) — OAuth and delegated auth patterns
 - [Jagadish-langchain-langgraph-langsmith](https://github.com/jagadishmazure-jpg/Jagadish-langchain-langgraph-langsmith) — deeper LangChain / LangGraph scenarios
 - [Jagadish-agent-memory-defense](https://github.com/jagadishmazure-jpg/Jagadish-agent-memory-defense) — defending agent memory from injected content
-
-## Credit
-
-The idea for the project shape (a task database, an MCP server, and several clients) came from a public video tutorial on building MCP servers by the AI Career Lab channel. All code and text here are written from scratch; nothing is copied from it.
 
 ## License
 
