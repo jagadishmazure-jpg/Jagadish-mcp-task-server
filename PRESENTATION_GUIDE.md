@@ -49,7 +49,7 @@ Backup if live demo fails: show `results/demo_output.txt` (measured output from 
 
 ## 5. Wrap-up (1 minute)
 
-- "<!-- tests:51 -->51 tests, all offline, run in CI with no API key."
+- "<!-- tests:90 -->90 tests, all offline, run in CI with no API key."
 - "Next steps would be OAuth with scopes, an audit log and a human-approval tool for anything destructive."
 
 ## Likely questions

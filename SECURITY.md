@@ -12,6 +12,15 @@ Do not open a public issue for security problems.
 - `server.py` tool validation, auth and bind behaviour
 - `database.py` query safety
 - CI workflows
+- MCP server pins and `security/mcp-server-allowlist.json`
+
+## MCP server supply chain
+
+This repo does not depend on the reference servers fixed in
+[modelcontextprotocol/servers v2.5.0](https://github.com/modelcontextprotocol/servers/releases/tag/v2.5.0).
+CI rejects an MCP server that is not exact-pinned and listed in the allowlist. Floors, if those packages are
+added later: `mcp-server-git` 2026.11.18, `@modelcontextprotocol/server-filesystem` 2.4.0,
+`@modelcontextprotocol/server-everything` 2.3.1. See [`docs/07-mcp-supply-chain.md`](docs/07-mcp-supply-chain.md).
 
 ## Secrets
 

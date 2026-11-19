@@ -3,7 +3,7 @@
 > **Recruiter summary.** A small to-do list exposed as a Model Context Protocol (MCP) server, then used
 > by three different clients: a plain FastMCP script, a LangChain agent, and IDE agents (Codex, VS Code).
 > The point it proves is **least privilege**: the agent gets exactly three tools and nothing else, so it
-> *cannot* edit a description even when asked. Proof: <!-- tests:51 -->**51 passing pytest tests**
+> *cannot* edit a description even when asked. Proof: <!-- tests:90 -->**90 passing pytest tests**
 > (measured), including prompt-injection cases and a real HTTP run with bearer-token auth, all offline with no API key.
 
 | | |
@@ -27,6 +27,7 @@
 | 7 | [`docs/06-connect-codex-vscode.md`](docs/06-connect-codex-vscode.md) | Add the server to Codex and VS Code |
 | 8 | [`USE_CASES.md`](USE_CASES.md) | Where this pattern fits in real work |
 | 9 | [`PRESENTATION_GUIDE.md`](PRESENTATION_GUIDE.md) | A 10-minute talk track for demos and interviews |
+| 10 | [`docs/07-mcp-supply-chain.md`](docs/07-mcp-supply-chain.md) | Pin and allowlist MCP servers; v2.5.0 reference-server fixes |
 | — | [`docs/adr/`](docs/adr/) | Architecture decisions |
 
 ## Purpose and who it is for
@@ -136,7 +137,7 @@ The latency line is one measured run on an 8-vCPU Linux box over loopback. It is
 
 ```bash
 uv sync                                  # installs Python 3.12 deps from uv.lock
-uv run pytest                            # 51 tests
+uv run pytest                            # 90 tests
 uv run python server.py                  # terminal 1: http://127.0.0.1:8000/mcp
 uv run python client.py                  # terminal 2: plain client
 uv run python langchain_client.py        # terminal 2: chat with the offline agent
@@ -163,8 +164,15 @@ uv run python langchain_client.py        # terminal 2: chat with the offline age
 | Optional bearer token, constant-time compare | `bearer_auth_from_env()` | `test_http_without_token_is_401`, `test_http_wrong_token_is_401` |
 | Task text treated as data, not instructions | system prompt + fake model design | `tests/test_prompt_injection.py` |
 | No secrets in the repo | `.env.example`, `.gitignore`, gitleaks in CI | CI `secrets` job |
+| Third-party MCP servers exact-pinned and allowlisted | `security/mcp-server-allowlist.json` | `tests/test_mcp_supply_chain.py`, CI `mcp-supply-chain` |
 
 **Why there are no secrets in this repo:** nothing here needs one to run. The model key and the bearer token are optional and are read from environment variables at start-up. `.env` is git-ignored, `.env.example` holds names only, Codex is given the *name* of a variable (`bearer_token_env_var`), and CI runs gitleaks over the full history on every push.
+
+## MCP server supply chain
+
+A host often starts an MCP server by package name (`npx`, `uvx`). That process runs as the user, and a name with no version tracks the registry. [modelcontextprotocol/servers v2.5.0](https://github.com/modelcontextprotocol/servers/releases/tag/v2.5.0) (18 November 2026) fixes eight vulnerabilities in three reference servers. One class, in `mcp-server-git`, is config-driven command execution: Git run by the server can follow repository settings and start other programs. If you use the affected packages, pin the fixed releases: `mcp-server-git` **2026.11.18**, `@modelcontextprotocol/server-filesystem` **2.4.0**, and `@modelcontextprotocol/server-everything` **2.3.1**. Date-style npm versions such as `2026.8.31` are still affected, and npm ranks them above `2.4.0`, so install that semver explicitly.
+
+This repository does not depend on those servers, so there was nothing to upgrade. The only configured server is the first-party task server on `127.0.0.1`. `security/mcp-server-allowlist.json` is the allowlist. CI job `mcp-supply-chain` runs `scripts/mcp_supply_chain_check.py` and fails when a server is unpinned or not on that list. Write-up: [`docs/07-mcp-supply-chain.md`](docs/07-mcp-supply-chain.md).
 
 ## Limitations and known failures
 
@@ -173,6 +181,7 @@ uv run python langchain_client.py        # terminal 2: chat with the offline age
 - **The static bearer token is a learning control,** not production auth: no rotation, no scopes, no per-user identity. Use OAuth 2.1 / Entra ID for real deployments.
 - **SQLite with one file** is fine for one user, not for concurrent multi-user writes.
 - No rate limiting, no audit log table, no human approval step yet (see the planned items).
+- **The MCP supply-chain gate is a static file check.** It does not watch a registry after a pin is written down.
 
 ## Built vs planned
 
@@ -190,7 +199,7 @@ Full table: [`docs/05-built-vs-planned.md`](docs/05-built-vs-planned.md).
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`, actions pinned to full SHAs): `uv sync --locked`, ruff, the full test suite via `scripts/count_tests.py` (prints the real total), `scripts/docs_check.py` (README test counts must match a fresh collection), a hashed brand-name check, and gitleaks over full history. CodeQL runs in `codeql.yml`.
+GitHub Actions (`.github/workflows/ci.yml`, actions pinned to full SHAs): `uv sync --locked`, ruff, the full test suite via `scripts/count_tests.py` (prints the real total), `scripts/docs_check.py` (README test counts must match a fresh collection), a hashed brand-name check, and gitleaks over full history. Job `mcp-supply-chain` fails the build on an unpinned or non-allowlisted MCP server (`scripts/mcp_supply_chain_check.py`, stdlib only, no package install). CodeQL runs in `codeql.yml`.
 
 ## Related repos
 
