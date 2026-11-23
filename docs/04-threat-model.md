@@ -25,6 +25,7 @@ flowchart LR
 | **I**nformation disclosure | Server reachable from LAN | Default bind `127.0.0.1` | `test_default_bind_is_loopback` | User can override `MCP_HOST` |
 | **D**enial of service | Huge titles / ids | Length limits (120 / 1000 / 64) | `test_bad_titles_rejected`, `test_oversized_task_id_rejected` | No rate limit (planned) |
 | **E**levation of privilege | Agent sets status `done` at create time | `status` not an argument of `create_task`; SQL hard-codes `'todo'` | `test_create_task_cannot_set_status` | — |
+| **E**levation of privilege | A client config starts an unpinned or vulnerable third-party MCP server, which can run programs or read files the task server cannot | Exact pin plus allowlist; CI job `mcp-supply-chain`. Reference servers are not dependencies. | `tests/test_mcp_supply_chain.py` | Static check. It does not query a registry after the pin |
 
 ## OWASP Top 10 for LLM applications (2025) — relevant items
 

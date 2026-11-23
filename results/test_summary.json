@@ -1,8 +1,8 @@
 {
   "label": "measured",
-  "tests_total": 51,
-  "passed": 51,
+  "tests_total": 90,
+  "passed": 90,
   "failed": 0,
   "skipped": 0,
-  "wall_seconds": 9.12
+  "wall_seconds": 5.09
 }

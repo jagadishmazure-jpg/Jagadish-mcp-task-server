@@ -24,7 +24,7 @@ flowchart LR
 | 9 | `client.py` | Prints tools, create, update, list |
 | 10 | `langchain_client.py` | Offline agent answers in a chat loop |
 | 11 | Codex and VS Code config | IDE agent lists your tasks |
-| 12 | pytest suite + bearer token | <!-- tests:51 -->51 tests pass |
+| 12 | pytest suite + bearer token | <!-- tests:90 -->90 tests pass |
 
 ---
 
@@ -559,7 +559,7 @@ uv run python scripts/count_tests.py   # prints the real total
 uv run ruff check .
 ```
 
-**Verify:** <!-- tests:51 -->51 passed (measured on this repo).
+**Verify:** <!-- tests:90 -->90 passed (measured on this repo).
 
 **Common errors**
 

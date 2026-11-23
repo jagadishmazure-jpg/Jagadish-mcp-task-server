@@ -12,9 +12,10 @@
 | IDE | VS Code `mcp.json`, Codex `config.toml.example` | Written, not run in CI | Needs an IDE session |
 | Real model | `ChatOpenAI` path | Written, not run (no key by design) | — |
 | CI | ruff, pytest with printed total, docs check, brand check, gitleaks, CodeQL | Built | `.github/workflows/` |
+| Supply chain | MCP server exact pin and allowlist; floors from servers v2.5.0 | Built, tested | `tests/test_mcp_supply_chain.py`, CI job `mcp-supply-chain` |
 | Resources / prompts | `tasks://summary`, planning prompt | Planned | — |
 | Auth | OAuth 2.1 / Entra ID with scopes | Planned | — |
 | Ops | Audit log, rate limiting, human approval tool | Planned | — |
 | Cloud | Container deployment | Planned only — nothing deployed, nothing billable | — |
 
-Test total: <!-- tests:51 -->51 (measured, `scripts/count_tests.py`).
+Test total: <!-- tests:90 -->90 (measured, `scripts/count_tests.py`).

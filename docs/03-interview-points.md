@@ -6,7 +6,7 @@ Short answers first, then the detail. Repo proof is named so you can open it liv
 
 "I built an MCP server for a task list and used it from three different clients — a plain script, a
 LangChain agent and IDE agents. The design choice I care about is least privilege: the server publishes three
-tools only, so the agent physically cannot edit or delete data. Each rule has a test — <!-- tests:51 -->51 in
+tools only, so the agent physically cannot edit or delete data. Each rule has a test — <!-- tests:90 -->90 in
 total, including prompt-injection cases and an HTTP run with token auth — and CI runs them with no API key."
 
 ## MCP vs function calling
@@ -45,6 +45,7 @@ total, including prompt-injection cases and an HTTP run with token auth — and 
 | Argument smuggling? | Schemas have `additionalProperties: false`. `test_update_status_rejects_smuggled_description`. |
 | Network exposure? | Loopback by default; bearer token optional; constant-time compare. `test_http_without_token_is_401`. |
 | Secrets? | None in repo; env vars only; gitleaks over full history in CI. |
+| Unpinned MCP server package? | Client configs and manifests are scanned. A server must be an exact pin on `security/mcp-server-allowlist.json`, at or above the [v2.5.0](https://github.com/modelcontextprotocol/servers/releases/tag/v2.5.0) floors (`mcp-server-git` 2026.11.18, filesystem 2.4.0). `tests/test_mcp_supply_chain.py`. |
 | What would you add for production? | OAuth 2.1 with scopes, audit log, rate limits, human approval for destructive tools, TLS. |
 
 ## Design trade-offs to mention
